@@ -1,21 +1,21 @@
-NAME
+NAME:
 	sish — a simple hell
 
-SYNOPSIS
+SYNOPSIS:
 	sish [ -x] [ -c command]
 
-DESCRIPTION
+DESCRIPTION:
 	sish implements a very simple command-line interpreter or shell. It is suitable to be used interactively or
 as a login shell. It only implements a very small subset of what would usually be expected of a Unix shell,
 and does explicitly not lend itself as a scripting language.
 
-OPTIONS
+OPTIONS:
 	The following options are supported by sish:
 	-c command
 		Execute the given command.
 	-x Enable tracing: Write each command to standard error, preceeded by ’+’.
 
-DETAILS
+DETAILS:
 	sish allows for the execution of the given commands with a minimal amount of niceties.
 When sish is invoked and no commands are passed via the -c flag, it will print a simple prompt to stdout.
 It then reads commands from the controlling terminal, executing them as one would expect.
@@ -37,23 +37,23 @@ CONSIST OF:
 	-parse.c
 		analyses user's input line and tell them to sish.
 
-Redirection
+Redirection:
 	sish supports the following three input-/output- redirection operators:
 	> file Redirect standard output to file. Mutually exclusive with the >> opreator.
 	>> file Append standard output to file. Mutually exclusive with the > opreator.
 	< file Redirect standard input from file.
 
-Pipeines
+Pipeines:
 	A pipeline is a sequence of one or more commands separated by the control operator ’|’. The standard output
 of all but the last command is connected to the standard input of the next command. The standard output of
 the last command is, absent any redirection operators, the controlling terminal.
 
-Background Commands -- &
+Background Commands -- &:
 	If a command is terminated by the control operator ampersand (&), the shell executes the command asynchronously
 -- that is, the shell does not wait for the command to finish before prompting the user for the next
 command.
 
-Builtins
+Builtins:
 	sish supports the following builtins (which are taking precedence over any non-builtin commands):
 
 	cd [dir] 	Change the current working directory. If dir is not specified, change to the user’s home
@@ -65,15 +65,15 @@ directory.
 
 	exit 		Exit the current shell.
 
-Command Execution
+Command Execution:
 	If a sequence of words does not begin with a builtin, sish will attempt to execute it as a command, possibly
 utilizing the current PATH.
 
-Environment
+Environment:
 	sish 	sets the following environment variables:
 	SHELL 	the path of the executable of sish
 
-EXAMPLES
+EXAMPLES:
 	The following sequence of commands shows common usage of sish:
 	$ sish
 	sish$ echo $$
@@ -123,10 +123,10 @@ EXAMPLES
 	+ exit
 	$
 
-EXIT STATUS
+EXIT STATUS:
 	sish returns the exit status of the last command it executed or a status of 127 if the given command could
 not be executed for any reason.
 
-SEE ALSO
+SEE ALSO:
 	bash(1), ksh(1), sh(1), execve(2), fork(2)
 
