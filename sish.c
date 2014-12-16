@@ -10,13 +10,12 @@
 */
 
 #include "sish.h"
-#define MAX_PATH 1024
-#define MAXPIDTABLE 1024
 char program_n[MAX_PATH] = {"\0"};
 char *getprogname();
 void proc();
 void setprogname(char *r1);
 pid_t BPTable[MAXPIDTABLE];
+void init_env( char *tmp_buffer);
 //-----------------------------------------------------------------------------
 void Usage()
 {
@@ -235,8 +234,30 @@ void proc(void)
 }
 
 //-----------------------------------------------------------------------------
+void 
+setReqMetaVar(char *var, char *val)
+{
+	if (val == NULL){
+		return;
+	}
+	if (setenv(var, val, 1) == -1) {
+		print_err("Error in set environment value");
+	}
+}
 //-----------------------------------------------------------------------------
+void 
+unsetReqMetaVar(char *var)
+{
+	if (unsetenv(var) == -1) {
+		print_err("Error in unset environment value");
+	}
+}
 //-----------------------------------------------------------------------------
+void init_env( char *tmp_buffer)
+{
+	unsetReqMetaVar("SHELL");
+	setReqMetaVar("SHELL",tmp_buffer);
+}
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -244,8 +265,14 @@ void proc(void)
 int main(int argc, char **argv)
 {
 	int ch = 0, i = 0;
+	char *tmp_buffer = NULL;
+	tmp_buffer = (char *)malloc(MAX_PATH*sizeof(char));
+	if( tmp_buffer == NULL)
+		print_err("Error in malloc\n");
+	memset( tmp_buffer, 0, MAX_PATH);
 	for( i = 0; i < MAXPIDTABLE; i++)
 		BPTable[i] = 0;
+	setprogname( argv[0]);
 	while((ch = getopt(argc, argv ,"c:xh"))!= -1)
 	{
 		switch(ch)
@@ -267,6 +294,16 @@ int main(int argc, char **argv)
 				break;
 		}
 	}
+	if(program_n[0] == '.' && program_n[1] == '/')
+	{
+		getcwd(tmp_buffer,sizeof(tmp_buffer));
+		strncat(tmp_buffer, program_n+2, MAX_PATH);
+	}
+	else
+	{
+		memcpy(tmp_buffer, program_n, strlen(program_n));
+	}
+	init_env( tmp_buffer);
 	proc();
 	return 0;
 }

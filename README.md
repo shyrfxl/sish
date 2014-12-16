@@ -30,7 +30,7 @@ CONSIST OF:
 		read command input, and analyse the command and parameter(s)
 
 	-builtin.c
-		support some suilt-in command, such as exit, echo, and cd
+		support some built-in command, such as exit, echo, and cd
 
 	-parse.c
 		analyses user's input line and tell them to sish.

@@ -21,9 +21,10 @@
 #include <sys/types.h>
 #include <sys/stat.h> 
 #define MAX_PROMPT 1024
+#define MAXPIDTABLE 1024
 #define MAXLINE 4096 //the length of all args is ARG_MAX
 #define MAXARG 20
-
+#define MAX_PATH 2048
 struct parse_info;
 struct passwd *pwd;
 char *buffer;
@@ -36,8 +37,9 @@ int builtin_command(char *,char **,int);
 int parsing(char **,int,struct parse_info *);
 void proc(void);
 void sig_handler(int sig);
-
-
+void unsetReqMetaVar(char *var);
+void setReqMetaVar(char *var, char *val);
+void print_err(const char *msg);
 
 #define STRUCT_PARSE_INFO
 #define BACKGROUND 		1
