@@ -1,7 +1,7 @@
 NAME:
 	sish — a simple hell
 
-SYNOPSIS:
+SYNOPSIS:	
 	sish [ -x] [ -c command]
 
 DESCRIPTION:
@@ -11,14 +11,12 @@ and does explicitly not lend itself as a scripting language.
 
 OPTIONS:
 	The following options are supported by sish:
-	-c command
-		Execute the given command.
+	-c command	Execute the given command.
 	-x Enable tracing: Write each command to standard error, preceeded by ’+’.
 
 DETAILS:
 	sish allows for the execution of the given commands with a minimal amount of niceties.
-When sish is invoked and no commands are passed via the -c flag, it will print a simple prompt to stdout.
-It then reads commands from the controlling terminal, executing them as one would expect.
+When sish is invoked and no commands are passed via the -c flag, it will print a simple prompt to stdout.It then reads commands from the controlling terminal, executing them as one would expect.
 
 CONSIST OF:
 	
@@ -55,14 +53,13 @@ command.
 
 Builtins:
 	sish supports the following builtins (which are taking precedence over any non-builtin commands):
-
 	cd [dir] 	Change the current working directory. If dir is not specified, change to the user’s home
 directory.
-
+	
 	echo [word] 	Print the given word, followed by a ’\n’. The following special values are supported:
 	$? The exit status of the last command.
 	$$ The current process ID.
-
+	
 	exit 		Exit the current shell.
 
 Command Execution:
@@ -79,17 +76,17 @@ EXAMPLES:
 	sish$ echo $$
 	6465
 	sish$ ls
-	file1 file2
+	file1 file2	
 	sish$ ls | wc -l
 	2
 	sish$ echo $?	
-	0
+	0	
 	sish$ find / >/dev/null &
 	sish$
-	sish$ aed -e -p ’passphrase’ -s ’0a1b2c3d’ <file >file.enc
+	sish$ aed -e -p ’passphrase’ -s ’0a1b2c3d’ <file >file.enc	
 	sish$ cmd | sort | uniq -c | sort -n
 	121 foo
-	304 bar
+	304 bar	
 	sish$ something
 	something: command not found	
 	sish$ echo $?
