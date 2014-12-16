@@ -36,10 +36,11 @@ int read_command(char **,char **,char*);
 int builtin_command(char *,char **,int);
 int parsing(char **,int,struct parse_info *);
 void proc(void);
-void sig_handler(int sig);
-void unsetReqMetaVar(char *var);
-void setReqMetaVar(char *var, char *val);
-void print_err(const char *msg);
+void sig_handler(int);
+void unsetReqMetaVar(char *);
+void setReqMetaVar(char *, char *);
+void print_err(const char *);
+char* get_env( char *);
 
 #define STRUCT_PARSE_INFO
 #define BACKGROUND 		1

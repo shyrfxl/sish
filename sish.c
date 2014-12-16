@@ -259,6 +259,13 @@ void init_env( char *tmp_buffer)
 	setReqMetaVar("SHELL",tmp_buffer);
 }
 //-----------------------------------------------------------------------------
+char* get_env( char *var)
+{
+	char* tmp = NULL;
+	if((tmp = getenv(var)))
+		return tmp;
+	return NULL;
+}
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
@@ -296,14 +303,22 @@ int main(int argc, char **argv)
 	}
 	if(program_n[0] == '.' && program_n[1] == '/')
 	{
-		getcwd(tmp_buffer,sizeof(tmp_buffer));
-		strncat(tmp_buffer, program_n+2, MAX_PATH);
+		if((getcwd(tmp_buffer,MAX_PATH)) == NULL)
+		{
+			perror("Error in getcwd:");
+			exit(EXIT_FAILURE);
+		}
+		strncat(tmp_buffer, program_n+1, MAX_PATH);
 	}
 	else
 	{
 		memcpy(tmp_buffer, program_n, strlen(program_n));
 	}
 	init_env( tmp_buffer);
+/*
+	tmp_buffer = get_env( "SHELL");
+	fprintf(stdout, "%s\n",tmp_buffer);
+*/
 	proc();
 	return 0;
 }
