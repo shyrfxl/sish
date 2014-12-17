@@ -126,7 +126,10 @@ void proc(void)
 					close(pipe_fd[0]);
 					ret = execvp(info.command2, info.parameters2);
 					if(ret == -1)
+					{
+						store_status = errno;
 						perror("execvp:");
+					}
 				}
 				else
 				{
@@ -241,7 +244,10 @@ void proc(void)
 			}
 			ret = execvp(command,parameters);
 			if(ret == -1)
+			{
+				store_status = errno;
 				perror("execvp:");
+			}
 		}
 		
 	}

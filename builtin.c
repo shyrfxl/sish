@@ -13,10 +13,8 @@
 int builtin_command( char *command, char **parameters, int count, struct parse_info * info)
 {
 	extern struct passwd *pwd;
-	//fprintf(stdout,"builtin:%s\n",command);
 	if(strcmp( command, "exit") == 0)
 	{
-		//fprintf(stdout,"exit()\n");
 		exit(0);
 	}
 	else if( strcmp( command, "echo") == 0)
@@ -37,7 +35,6 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 			{
 				int length = 0;
 				length = strlen(parameters[i]);
-				//fprintf(stdout, "%d\n", length);
 				if (parameters[i][0] == '\"')
 				{
 					quto = 1;
@@ -49,7 +46,6 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 							signal = 1;
 							break;
 						}
-						//fprintf( stdout, "22\n");
 					}
 					if (signal == 1)
 					{
@@ -62,18 +58,16 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 						else if(strncmp(O_name,"?",1) == 0)
 						{
 							char Error[10]={"\0"};
-							snprintf(Error,10,"%d",status);
+							snprintf(Error,10,"%d",store_status);
 							strncat(O_buffer, Error,strlen(Error));
 						}
 						else if(strncmp(O_name,"$",1) == 0)
 						{
 							char C_pid[10] = {"\0"};
 							ChdPid = getpid();
-							//fprintf(stdout, "%d\n",ChdPid);
 							snprintf(C_pid, 10, "%d",ChdPid);
 							strncat(O_buffer,C_pid, strlen(C_pid));
 						}
-						//fprintf(stdout, "%s  %s\n", O_name,tmp_Output);
 						memset(O_name, 0, Max_name);
 						strncat(O_buffer," \0", 2);
 						if( parameters[i][length-1] == '\"')
@@ -94,7 +88,6 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 					continue;
 				
 				}
-				//fprintf(stdout, "11%s\n",O_buffer);
 				if(parameters[i][0] == '$')
 				{
 					
@@ -102,20 +95,18 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 						memcpy(O_name, parameters[i]+1, strlen(parameters[i])-1);
 					else
 						memcpy(O_name, parameters[i]+1, strlen(parameters[i]));
-					//fprintf(stdout, "11%s\n", O_name);
 					if((tmp_Output = get_env( O_name)) != NULL)
 						strncat(O_buffer,tmp_Output, strlen(tmp_Output));
 					else if(strncmp(O_name,"?",1) == 0)
 					{
 						char Error[10]={"\0"};
-						snprintf(Error,10,"%d",errno);
+						snprintf(Error,10,"%d",store_status);
 						strncat(O_buffer, Error,strlen(Error));
 					}
 					else if(strncmp(O_name,"$",1) == 0)
 					{
 						char C_pid[10] = {"\0"};
 						ChdPid = getpid();
-						fprintf(stdout, "11 %d\n",ChdPid);
 						snprintf(C_pid, 10, "%d",ChdPid);
 						strncat(O_buffer,C_pid, strlen(C_pid));
 					}
@@ -135,7 +126,6 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 				else
 					strncat(O_buffer, parameters[i],length);
 				strncat(O_buffer," \0", 2);
-				//fprintf(stdout, "%d:22%s\n",i,O_buffer);
 				i++;
 			}				
 			if(pipe(pipe_fd)<0)
@@ -151,20 +141,21 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 				close(pipe_fd[0]);
 				ret = execvp(info->command2, info->parameters2);
 				if(ret == -1)
-					print_err("execvp error: execvp failed.\n");
+				{
+					store_status = errno;
+					perror("execvp:");
+				}		
 			}
 			else
 			{
 				close(pipe_fd[0]);
 				write(pipe_fd[1], O_buffer,strlen(O_buffer));
-				//fprintf(stdout, "%s", O_buffer);
 				close(pipe_fd[1]);
 				waitpid(ChdPid2, &status, 0);
 			}		
 		}
 		else if(info->flag & BACKGROUND)
 		{
-			fprintf(stdout, "Child pid:%u\n",ChdPid);
 			int i = 0;
 			for( i = 0; i<MAXPIDTABLE;i++)
 				if(BPTable[i] == 0)
@@ -182,7 +173,6 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 			{
 				int length = 0;
 				length = strlen(parameters[i]);
-				//fprintf(stdout, "%d\n", length);
 				if (parameters[i][0] == '\"')
 				{
 					quto = 1;
@@ -194,7 +184,6 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 							signal = 1;
 							break;
 						}
-						//fprintf( stdout, "22\n");
 					}
 					if (signal == 1)
 					{
@@ -207,7 +196,7 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 						else if(strncmp(O_name,"?",1) == 0)
 						{
 							char Error[10]={"\0"};
-							snprintf(Error,10,"%d",status);
+							snprintf(Error,10,"%d",store_status);
 							strncat(O_buffer, Error,strlen(Error));
 						}
 						else if(strncmp(O_name,"$",1) == 0)
@@ -217,7 +206,6 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 							snprintf(C_pid, 10, "%d",ChdPid);
 							strncat(O_buffer,C_pid, strlen(C_pid));
 						}
-						//fprintf(stdout, "%s  %s\n", O_name,tmp_Output);
 						memset(O_name, 0, Max_name);
 						strncat(O_buffer," \0", 2);
 						if( parameters[i][length-1] == '\"')
@@ -225,8 +213,13 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 						i++;
 						continue;		
 					}
-					
-					strncat(O_buffer, parameters[i]+1,length-1);
+					if( parameters[i][length-1] == '\"')
+					{
+						quto = 0;
+						strncat(O_buffer, parameters[i]+1,length-2);
+					}
+					else
+						strncat(O_buffer, parameters[i]+1,length-1);
 					strncat(O_buffer," \0", 2);
 					signal = 0;
 					i++;
@@ -245,7 +238,7 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 					else if(strncmp(O_name,"?",1) == 0)
 					{
 						char Error[10]={"\0"};
-						snprintf(Error,10,"%d",errno);
+						snprintf(Error,10,"%d",store_status);
 						strncat(O_buffer, Error,strlen(Error));
 					}
 					else if(strncmp(O_name,"$",1) == 0)
@@ -293,6 +286,7 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 				close(out_fd);
 			}
 		}
+		return 1;
 	}
 	else if( strcmp( command, "cd") == 0)
 	{
@@ -307,7 +301,6 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 			}
 			memset(cd_path,0, strlen(pwd->pw_dir)+1);
 			memcpy( cd_path, pwd->pw_dir, strlen(pwd->pw_dir));
-			fprintf(stdout,"builtin:%s\n",cd_path);
 
 		}
 		else
@@ -337,10 +330,10 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 				memcpy( cd_path, parameters[1], strlen(parameters[1])+1);
 			}
 		}
-		fprintf(stdout,"builtin:%s\n",cd_path);
 		if(chdir(cd_path)!= 0)
 			fprintf( stderr, "+ sish : cd: %s:%s\n", cd_path, strerror(errno));
 		free(cd_path);
+		return 1;
 	}
 	return 0;
 	
