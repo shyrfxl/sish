@@ -96,6 +96,10 @@ void proc(void)
 		print_err("Error in malloc");
 	if(signal(SIGCHLD,sig_handler) == SIG_ERR)
 		perror("signal() error");
+	if(signal(SIGINT, SIG_IGN) == SIG_ERR) 
+	{
+		perror("signal() error");
+	}
 	while(1)
 	{
 		int pipe_fd[2], in_fd, out_fd, ret = 0;
