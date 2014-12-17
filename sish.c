@@ -15,6 +15,7 @@ char *getprogname();
 void proc();
 void setprogname(char *r1);
 void init_env( char *tmp_buffer);
+void run_command(char* command);
 //-----------------------------------------------------------------------------
 void Usage()
 {
@@ -270,12 +271,36 @@ char* get_env( char *var)
 	return NULL;
 }
 //-----------------------------------------------------------------------------
+void *Calloc(size_t n, size_t size)
+{
+	void *ptr = NULL;
+	if(( ptr = calloc(n,size))== NULL)
+		print_err("calloc error\n");
+	return ptr;
+			
+}
 //-----------------------------------------------------------------------------
-
+void run_command(char* command)
+{
+	char Buf[MAX_PATH] = {"\0"};
+	FILE *rfd = NULL;
+	if((rfd = popen(command, "r")) == NULL) 
+	{
+		print_err("Error in popen()\n");
+	}
+	while(fgets(Buf, MAX_PATH, rfd)!=NULL)
+	 {
+		fprintf(stdout,"%s",Buf);
+	}
+	pclose(rfd);
+	exit(0);
+}
+//-----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
 	int ch = 0, i = 0;
 	char *tmp_buffer = NULL;
+	char *one_tcommand = NULL;
 	tmp_buffer = (char *)malloc(MAX_PATH*sizeof(char));
 	if( tmp_buffer == NULL)
 		print_err("Error in malloc\n");
@@ -289,6 +314,9 @@ int main(int argc, char **argv)
 		{
 			case 'c':
 				cflag = 1;
+				one_tcommand = (char *)Calloc(strlen(optarg)+1,sizeof(char));
+				memcpy(one_tcommand, optarg, strlen(optarg));
+				run_command(one_tcommand);
 				break;	
 			case 'x':
 				xflag = 1;

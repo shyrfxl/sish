@@ -87,7 +87,7 @@ int read_command( char **command, char **parameters, char *prompt)
 		p_start = p_end;
 	}
 	parameters[count-1] = NULL;
-	fprintf(stdout,"count : %d\n",count);
+/*	fprintf(stdout,"count : %d\n",count);
 	fprintf(stdout, "Input analysis:\n");
 	fprintf(stdout, "pathname: %s\ncommand:%s\nparameters:\n", *command, parameters[0]);
 	int i;
@@ -96,6 +96,7 @@ int read_command( char **command, char **parameters, char *prompt)
 		fprintf(stdout,"%s\n", parameters[i]);
 	}
 	//free(buffer);
+*/
 	buffer = tmpbuffer;
 	
 	return count;

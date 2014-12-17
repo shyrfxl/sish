@@ -74,7 +74,7 @@ int parsing( char **parameters, int arg_num, struct parse_info *info)
 			i++;
 	
 	}
-	
+/*	
 	fprintf(stdout,"\nbackground:%s\n",info->flag&BACKGROUND?"yes":"no");
 	fprintf(stdout,"in redirect:");
 	info->flag&IN_REDIRECT?fprintf(stdout,"yes,file:%s\n",info->in_file):fprintf(stdout,"no\n");
@@ -82,7 +82,7 @@ int parsing( char **parameters, int arg_num, struct parse_info *info)
 	info->flag&OUT_REDIRECT?fprintf(stdout,"yes,file:%s\n",info->out_file):fprintf(stdout,"no\n");
 	fprintf(stdout, "pipe:");
 	info->flag&IS_PIPED?fprintf(stdout,"yes,command:%s %s %s\n",info->command2,info->parameters2[0],info->parameters2[1]):fprintf(stdout,"no\n");
-	
+*/	
 	return 1;
 }
 
