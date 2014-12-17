@@ -101,7 +101,6 @@ void proc(void)
 		int pipe_fd[2], in_fd, out_fd, ret = 0;
 		type_prompt(prompt);
 		arg_num = read_command(&command, parameters,prompt);
-		//fprintf(stdout,"sish.c:%s, %s\n",command, parameters[0]);
 		if( arg_num == -1)
 			continue;
 		arg_num--;
@@ -127,7 +126,7 @@ void proc(void)
 					close(pipe_fd[0]);
 					ret = execvp(info.command2, info.parameters2);
 					if(ret == -1)
-						print_err("execvp error: execvp failed.\n");
+						perror("execvp:");
 				}
 				else
 				{
@@ -141,9 +140,9 @@ void proc(void)
 					waitpid(ChdPid2, &status, 0);
 				}
 			}
-			else if(info.flag & BACKGROUND)
+			if(info.flag & BACKGROUND)
 			{
-				fprintf(stdout, "Child pid:%u\n",ChdPid);
+				//fprintf(stdout, "Child pid:%u\n",ChdPid);
 				int i = 0;
 				for( i = 0; i<MAXPIDTABLE;i++)
 					if(BPTable[i] == 0)
@@ -160,7 +159,7 @@ void proc(void)
 			}
 			else
 			{
-				if(xflag == 1)
+				if(xflag == 1 && !(info.flag & IS_PIPED) && !(info.flag & BACKGROUND))
 				{
 					fprintf(stderr,"+ %s\n",command);
 				}
@@ -242,7 +241,7 @@ void proc(void)
 			}
 			ret = execvp(command,parameters);
 			if(ret == -1)
-				print_err("execvp error: execvp failed.\n");
+				perror("execvp:");
 		}
 		
 	}
