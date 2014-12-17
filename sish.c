@@ -65,7 +65,7 @@ void sig_handler(int sig)
 			pid = waitpid(BPTable[i], NULL, WNOHANG);
 			if(pid > 0)
 			{
-				fprintf(stdout,"process %d exited.\n",pid);
+				//fprintf(stdout,"process %d exited.\n",pid);
 				BPTable[i] = 0;
 			}
 			else if(pid < 0)
