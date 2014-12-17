@@ -101,7 +101,7 @@ void proc(void)
 		int pipe_fd[2], in_fd, out_fd, ret = 0;
 		type_prompt(prompt);
 		arg_num = read_command(&command, parameters,prompt);
-		fprintf(stdout,"sish.c:%s, %s\n",command, parameters[0]);
+		//fprintf(stdout,"sish.c:%s, %s\n",command, parameters[0]);
 		if( arg_num == -1)
 			continue;
 		arg_num--;
@@ -133,6 +133,11 @@ void proc(void)
 				{
 					close(pipe_fd[0]);
 					close(pipe_fd[1]);
+					if(xflag == 1)
+					{
+						fprintf(stderr,"+ %s\n",command);
+						fprintf(stderr,"+ %s\n",info.command2);
+					}
 					waitpid(ChdPid2, &status, 0);
 				}
 			}
@@ -148,9 +153,17 @@ void proc(void)
 					}
 				if( i == MAXPIDTABLE)
 					perror("Too much processes in background\nThere will be zombine process");
+				if(xflag == 1)
+				{
+					fprintf(stderr,"+ %s\n",command);
+				}
 			}
 			else
 			{
+				if(xflag == 1)
+				{
+					fprintf(stderr,"+ %s\n",command);
+				}
 				waitpid( ChdPid, &status, 0);
 			}
 		}

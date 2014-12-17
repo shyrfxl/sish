@@ -13,10 +13,10 @@
 int builtin_command( char *command, char **parameters, int count, struct parse_info * info)
 {
 	extern struct passwd *pwd;
-	fprintf(stdout,"builtin:%s\n",command);
+	//fprintf(stdout,"builtin:%s\n",command);
 	if(strcmp( command, "exit") == 0)
 	{
-		fprintf(stdout,"exit()\n");
+		//fprintf(stdout,"exit()\n");
 		exit(0);
 	}
 	else if( strcmp( command, "echo") == 0)
@@ -339,7 +339,7 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 		}
 		fprintf(stdout,"builtin:%s\n",cd_path);
 		if(chdir(cd_path)!= 0)
-			fprintf( stderr, "+sish : cd: %s:%s\n", cd_path, strerror(errno));
+			fprintf( stderr, "+ sish : cd: %s:%s\n", cd_path, strerror(errno));
 		free(cd_path);
 	}
 	return 0;
