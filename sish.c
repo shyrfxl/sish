@@ -14,7 +14,6 @@ char program_n[MAX_PATH] = {"\0"};
 char *getprogname();
 void proc();
 void setprogname(char *r1);
-pid_t BPTable[MAXPIDTABLE];
 void init_env( char *tmp_buffer);
 //-----------------------------------------------------------------------------
 void Usage()
@@ -81,7 +80,7 @@ void sig_handler(int sig)
 //-----------------------------------------------------------------------------
 void proc(void)
 {	
-	int status = 0;
+	status = 0;
 	char *command = NULL;
 	char **parameters;
 	int arg_num = 0;
@@ -106,7 +105,7 @@ void proc(void)
 			continue;
 		arg_num--;
 		parsing(parameters, arg_num, &info);
-		if(builtin_command( command, parameters,arg_num))
+		if(builtin_command( command, parameters,arg_num,&info))
 			continue;
 		if(info.flag & IS_PIPED)
 		{
@@ -125,7 +124,9 @@ void proc(void)
 					if(ret == -1)
 						print_err("dup2 error: dup2 failed.\n");
 					close(pipe_fd[0]);
-					execvp(info.command2, info.parameters2);
+					ret = execvp(info.command2, info.parameters2);
+					if(ret == -1)
+						print_err("execvp error: execvp failed.\n");
 				}
 				else
 				{
@@ -225,7 +226,9 @@ void proc(void)
 					print_err("dup2 error: dup2 failed.\n");
 				close(in_fd);
 			}
-			execvp(command,parameters);
+			ret = execvp(command,parameters);
+			if(ret == -1)
+				print_err("execvp error: execvp failed.\n");
 		}
 		
 	}

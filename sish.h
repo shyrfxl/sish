@@ -25,15 +25,18 @@
 #define MAXLINE 4096 //the length of all args is ARG_MAX
 #define MAXARG 20
 #define MAX_PATH 2048
+#define Max_name 256
+
 struct parse_info;
 struct passwd *pwd;
 char *buffer;
 short cflag;
 short xflag;
-
+pid_t BPTable[MAXPIDTABLE];
+int status;
 void type_prompt(char*);
 int read_command(char **,char **,char*);
-int builtin_command(char *,char **,int);
+int builtin_command(char *,char **,int, struct parse_info *);
 int parsing(char **,int,struct parse_info *);
 void proc(void);
 void sig_handler(int);
