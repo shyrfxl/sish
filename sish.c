@@ -141,7 +141,7 @@ void proc(void)
 					waitpid(ChdPid2, &status, 0);
 				}
 			}
-			if(info.flag & BACKGROUND)
+			else if(info.flag & BACKGROUND)
 			{
 				fprintf(stdout, "Child pid:%u\n",ChdPid);
 				int i = 0;
