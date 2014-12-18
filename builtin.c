@@ -16,10 +16,12 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 	if(strcmp( command, "exit") == 0)
 	{
 		exit(0);
+		return 1;
 	}
 	else if( strcmp( command, "echo") == 0)
 	{
 		int pipe_fd[2], ret = 0,out_fd, i = 0, quto = 0;
+		extern int store_status;
 		int j = 1, signal = 0;
 		pid_t ChdPid = 0,ChdPid2 = 0;
 		char O_buffer[MAXLINE] = {"\0"}, O_name[Max_name] = {"\0"};
@@ -58,7 +60,7 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 						else if(strncmp(O_name,"?",1) == 0)
 						{
 							char Error[10]={"\0"};
-							snprintf(Error,10,"%d",store_status);
+							snprintf(Error,10,"%d",status);
 							strncat(O_buffer, Error,strlen(Error));
 						}
 						else if(strncmp(O_name,"$",1) == 0)
@@ -100,7 +102,7 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 					else if(strncmp(O_name,"?",1) == 0)
 					{
 						char Error[10]={"\0"};
-						snprintf(Error,10,"%d",store_status);
+						snprintf(Error,10,"%d",status);
 						strncat(O_buffer, Error,strlen(Error));
 					}
 					else if(strncmp(O_name,"$",1) == 0)
@@ -146,7 +148,8 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 					perror("execvp:");
 				}
 				else
-					store_status = 0;		
+					store_status = 0;	
+				exit(errno);	
 			}
 			else
 			{
@@ -198,7 +201,7 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 						else if(strncmp(O_name,"?",1) == 0)
 						{
 							char Error[10]={"\0"};
-							snprintf(Error,10,"%d",store_status);
+							snprintf(Error,10,"%d",status);
 							strncat(O_buffer, Error,strlen(Error));
 						}
 						else if(strncmp(O_name,"$",1) == 0)
@@ -240,7 +243,7 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 					else if(strncmp(O_name,"?",1) == 0)
 					{
 						char Error[10]={"\0"};
-						snprintf(Error,10,"%d",store_status);
+						snprintf(Error,10,"%d",status);
 						strncat(O_buffer, Error,strlen(Error));
 					}
 					else if(strncmp(O_name,"$",1) == 0)

@@ -81,6 +81,7 @@ void sig_handler(int sig)
 //-----------------------------------------------------------------------------
 void proc(void)
 {	
+	extern int store_status;
 	status = 0;
 	char *command = NULL;
 	char **parameters;
@@ -96,10 +97,10 @@ void proc(void)
 		print_err("Error in malloc");
 	if(signal(SIGCHLD,sig_handler) == SIG_ERR)
 		perror("signal() error");
-	/*if(signal(SIGINT, SIG_IGN) == SIG_ERR) 
+	if(signal(SIGINT, SIG_IGN) == SIG_ERR) 
 	{
 		perror("signal() error");
-	}*/
+	}
 	while(1)
 	{
 		int pipe_fd[2], in_fd, out_fd, ret = 0;
@@ -136,6 +137,7 @@ void proc(void)
 					}
 					else
 						store_status = 0;
+					exit(errno);
 				}
 				else
 				{
@@ -263,6 +265,7 @@ void proc(void)
 			}
 			else
 				store_status = 0;
+			exit(errno);
 		}
 		
 	}
