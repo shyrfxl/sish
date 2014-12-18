@@ -134,6 +134,8 @@ void proc(void)
 						store_status = errno;
 						perror("execvp:");
 					}
+					else
+						store_status = 0;
 				}
 				else
 				{
@@ -259,6 +261,8 @@ void proc(void)
 				store_status = errno;
 				perror("execvp:");
 			}
+			else
+				store_status = 0;
 		}
 		
 	}

@@ -144,7 +144,9 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 				{
 					store_status = errno;
 					perror("execvp:");
-				}		
+				}
+				else
+					store_status = 0;		
 			}
 			else
 			{
