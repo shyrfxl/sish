@@ -15,6 +15,8 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 	extern struct passwd *pwd;
 	if(strcmp( command, "exit") == 0)
 	{
+		if(xflag == 1)
+			fprintf(stdout, "+ exit\n");
 		exit(0);
 		return 1;
 	}
@@ -335,6 +337,8 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 				memcpy( cd_path, parameters[1], strlen(parameters[1])+1);
 			}
 		}
+		if(xflag == 1)
+			fprintf(stdout, "+ cd\n");
 		if(chdir(cd_path)!= 0)
 			fprintf( stderr, "+ sish : cd: %s:%s\n", cd_path, strerror(errno));
 		free(cd_path);
