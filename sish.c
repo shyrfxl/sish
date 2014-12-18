@@ -81,7 +81,6 @@ void sig_handler(int sig)
 //-----------------------------------------------------------------------------
 void proc(void)
 {	
-	extern int store_status;
 	status = 0;
 	char *command = NULL;
 	char **parameters;
@@ -132,11 +131,8 @@ void proc(void)
 					ret = execvp(info.command2, info.parameters2);
 					if(ret == -1)
 					{
-						store_status = errno;
 						perror("execvp:");
 					}
-					else
-						store_status = 0;
 					exit(errno);
 				}
 				else
@@ -260,11 +256,9 @@ void proc(void)
 			ret = execvp(command,parameters);
 			if(ret == -1)
 			{
-				store_status = errno;
+				//fprintf(stdout, "%s\n",command);
 				perror("execvp:");
 			}
-			else
-				store_status = 0;
 			exit(errno);
 		}
 		
