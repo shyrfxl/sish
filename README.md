@@ -35,6 +35,12 @@ CONSIST OF:
 	-parse.c
 		analyses user's input line and tell them to sish.
 
+Limitation:
+
+	$?:   when the error happens, the value of $? return is different with example.
+	"|":  when use pipe command, the lines of output is different with expected. 
+	-c:   when use -c argument, the format of output may be different with expected.
+
 Redirection:
 	sish supports the following three input-/output- redirection operators:
 	> file Redirect standard output to file. Mutually exclusive with the >> opreator.
