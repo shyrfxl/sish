@@ -96,10 +96,10 @@ void proc(void)
 		print_err("Error in malloc");
 	if(signal(SIGCHLD,sig_handler) == SIG_ERR)
 		perror("signal() error");
-	if(signal(SIGINT, SIG_IGN) == SIG_ERR) 
+	/*if(signal(SIGINT, SIG_IGN) == SIG_ERR) 
 	{
 		perror("signal() error");
-	}
+	}*/
 	while(1)
 	{
 		int pipe_fd[2], in_fd, out_fd, ret = 0;
@@ -142,7 +142,14 @@ void proc(void)
 					if(xflag == 1)
 					{
 						fprintf(stderr,"+ %s\n",command);
-						fprintf(stderr,"+ %s\n",info.command2);
+						fprintf(stderr,"+ %s ",info.command2);
+						int i = 1;
+						while(info.parameters2[i] != NULL)
+						{
+							fprintf(stderr," %s",info.parameters2[i]);
+							i++;
+						}
+						fprintf(stderr, "\n");
 					}
 					waitpid(ChdPid2, &status, 0);
 				}
