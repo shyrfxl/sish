@@ -334,7 +334,17 @@ int builtin_command( char *command, char **parameters, int count, struct parse_i
 			}
 		}
 		if(xflag == 1)
-			fprintf(stdout, "+ cd\n");
+		{
+			fprintf(stdout, "+ cd");
+			if(count != 1)
+			{
+				fprintf(stdout, " %s\n",cd_path);
+			}
+			else
+			{
+				fprintf(stdout, "\n");
+			}
+		}
 		if(chdir(cd_path)!= 0)
 			fprintf( stderr, "+ sish : cd: %s:%s\n", cd_path, strerror(errno));
 		free(cd_path);
